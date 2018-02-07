@@ -62984,7 +62984,7 @@ DUK_LOCAL duk_int_t duk__handle_call_raw(duk_hthread *thr,
 	duk_activation *act;
 	duk_ret_t rc;
 	duk_small_uint_t use_tailcall;
-
+	act = NULL;
 	DUK_ASSERT(thr != NULL);
 	DUK_ASSERT(thr->heap != NULL);
 	/* Asserts for heap->curr_thread omitted: it may be NULL, 'thr', or
