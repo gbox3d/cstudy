@@ -24,6 +24,17 @@ namespace TGE {
 		return &(pBuf[(80 * y) + x]);
 	}
 
+	void setCharacterW(CHAR_INFO* pBuf, int x, int y, WCHAR code, WORD attr)
+	{
+		//chiBuffer[(80 * 5) + 5].Char.UnicodeChar = TEXT('A');
+		int _nIndex = (80 * y) + (x);
+		pBuf[_nIndex].Char.UnicodeChar = code;
+		pBuf[_nIndex].Attributes = COMMON_LVB_LEADING_BYTE | attr;
+
+		pBuf[_nIndex+1].Char.UnicodeChar = code;
+		pBuf[_nIndex+1].Attributes = COMMON_LVB_TRAILING_BYTE | attr;
+	}
+
 	void clearScreenBuffer( WCHAR _wCode, WORD _wAttr)
 	{
 		CHAR_INFO *pBuf = TGE::g_chiBuffer;
