@@ -7,22 +7,25 @@
 int main()
 {
 	
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE hStdout;
+	TGE::startTGE(&hStdout);
+
 	TGE::clearScreenBuffer(TGE::g_chiBuffer, 0x0020,0x009f);
 
 	//https://ko.wikipedia.org/wiki/%EC%9C%A0%EB%8B%88%EC%BD%94%EB%93%9C_2000~2FFF
-	/*TGE::g_chiBuffer[0].Char.UnicodeChar = 0x2665; //하트모양 
-	TGE::g_chiBuffer[0].Attributes = COMMON_LVB_LEADING_BYTE | 0x00fc; 
-
-	TGE::g_chiBuffer[1].Char.UnicodeChar = 0x2665;
-	TGE::g_chiBuffer[1].Attributes = COMMON_LVB_TRAILING_BYTE | 0x00fc;
-	*/
+	
 	TGE::setCharacterW(TGE::g_chiBuffer, 0, 0, 0x2663, 0x00fc);
-	TGE::setCharacterW(TGE::g_chiBuffer, 4, 0, 0x2665, 0x00fc);
+	TGE::setCharacterW(TGE::g_chiBuffer, 1, 0, 0x2665, 0x00fc);
+	TGE::setCharacterW(TGE::g_chiBuffer, 2, 2, 0x00, 0x00fc);
 
-	//TGE::setCharacter(, 2, 0, TEXT('A'), 0x00fc);
-    //std::cout << "Hello tge!\n";
-
+	TGE::setCharacter(TGE::g_chiBuffer,4, 1, TEXT('A'), 0x00fc);
+	TGE::setCharacter(TGE::g_chiBuffer,5, 1, TEXT('B'), 0x00fc);
+    
 	TGE::updateBuffer(hStdout,TGE::g_chiBuffer);
+
+	TGE::setCursor(hStdout, 0, 20);
+
+	TGE::endTGE();
+
 	return 0;
 }
