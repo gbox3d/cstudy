@@ -4,6 +4,19 @@ namespace TGE {
 
 	CHAR_INFO g_chiBuffer[SCREEN_BUF_SIZE];
 
+	CONSOLE_CURSOR_INFO g_cursorInfo;
+
+	void hideCursor(HANDLE handle)
+	{	
+		g_cursorInfo.bVisible = false;
+		SetConsoleCursorInfo(handle, &g_cursorInfo);
+	}
+	void showCursor(HANDLE handle)
+	{
+		g_cursorInfo.bVisible = true;
+		SetConsoleCursorInfo(handle, &g_cursorInfo);
+	}
+
 	void setCursor(HANDLE handle, int x, int y)
 	{
 		COORD _pos;
@@ -110,14 +123,25 @@ namespace TGE {
 		return _nTokenIndex;
 	}
 
+	char g_szTokens[8][MAX_TOKEN_SIZE];
+	int Tokenize(char* szBuf)
+	{	
+		return doTokenize(szBuf, g_szTokens);
+	}
+
 	int loadBufferBinary(CHAR_INFO *pBuf, const char *szFileName) 
 	{
 		FILE *fp;
 		fopen_s(&fp, szFileName, "r");
-		fread_s(pBuf, SCREEN_BUF_SIZE * sizeof(CHAR_INFO), sizeof(CHAR_INFO), SCREEN_BUF_SIZE, fp);
-		fclose(fp);
+		if (!fp)
+		{
+			fread_s(pBuf, SCREEN_BUF_SIZE * sizeof(CHAR_INFO), sizeof(CHAR_INFO), SCREEN_BUF_SIZE, fp);
+			fclose(fp);
+			return 0;
+		}
+		
 
-		return 0;
+		return -1;
 	}
 	
 	int saveBufferBinary(CHAR_INFO *pBuf, const char *szFileName) 
@@ -181,6 +205,8 @@ namespace TGE {
 		HANDLE hStdin;
 		COORD g_cdMousePos;
 
+		int _InputThreadFSM = 0;
+
 		DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 		{
 			hStdin = GetStdHandle(STD_INPUT_HANDLE);
@@ -191,30 +217,50 @@ namespace TGE {
 			SetConsoleMode(hStdin, ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
 			
 			while (1) {
-				ReadConsoleInput(hStdin, irInBuf, 128, &_NumRead);
-				for (DWORD i = 0; i < _NumRead; i++) {
-					if (irInBuf[i].EventType == KEY_EVENT) {
-						if (irInBuf[i].Event.KeyEvent.bKeyDown) {
-							g_KeyTable[irInBuf[i].Event.KeyEvent.wVirtualKeyCode] = 1;
+				
+				switch (_InputThreadFSM)
+				{
+				case 0:
+				{
+					ReadConsoleInput(hStdin, irInBuf, 128, &_NumRead);
+					for (DWORD i = 0; i < _NumRead; i++) {
+						if (irInBuf[i].EventType == KEY_EVENT) {
+							if (irInBuf[i].Event.KeyEvent.bKeyDown) {
+								g_KeyTable[irInBuf[i].Event.KeyEvent.wVirtualKeyCode] = 1;
+							}
+							else {
+								g_KeyTable[irInBuf[i].Event.KeyEvent.wVirtualKeyCode] = 0;
+							}
 						}
-						else {
-							g_KeyTable[irInBuf[i].Event.KeyEvent.wVirtualKeyCode] = 0;
+						else if (irInBuf[i].EventType == MOUSE_EVENT) {
+
+							g_cdMousePos = {
+								irInBuf[i].Event.MouseEvent.dwMousePosition.X,
+								irInBuf[i].Event.MouseEvent.dwMousePosition.Y
+							};
 						}
 					}
-					else if (irInBuf[i].EventType == MOUSE_EVENT) {
-						
-						g_cdMousePos = {
-							irInBuf[i].Event.MouseEvent.dwMousePosition.X,
-							irInBuf[i].Event.MouseEvent.dwMousePosition.Y
-						};
-					}
+					
+				}
+					break;
+				case 1:
+					break;
+				default:
+					break;
 				}
 				Sleep(1);
 			}
 			SetConsoleMode(hStdin, _oldInputMode);
 			return 0;
 		}
-
+		void pauseInputThread()
+		{
+			_InputThreadFSM = 1;
+		}
+		void resumeInputThread()
+		{
+			_InputThreadFSM = 0;
+		}
 		void setEditMode()
 		{
 			SetConsoleMode(hStdin, _oldInputMode);
@@ -235,14 +281,17 @@ namespace TGE {
 
 		TGE::clearScreenBuffer(0x20, 0x0090);
 
+		TGE::input::_InputThreadFSM = 0;
+
 		hThread_ReadInput = CreateThread(
 			NULL, 0, input::MyThreadFunction, NULL, 0, &dwThreadId_ReadInput
 		);
 
+		//커서 정보 얻기
+		GetConsoleCursorInfo(*phStdout, &g_cursorInfo);
 		
 	}
-	void endTGE() {
-
+	void endTGE() {		
 	}
 
 	namespace util {

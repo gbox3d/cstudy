@@ -19,6 +19,8 @@ namespace TGE {
 	const int MAX_TOKEN_SIZE = 64;
 	const int Version = 100;
 
+	void hideCursor(HANDLE handle);
+	void showCursor(HANDLE handle);
 	void setCursor(HANDLE handle, int x, int y);
 	void clearScreenBuffer( WCHAR _wCode, WORD _wAttr);
 	void clearScreenBuffer(CHAR_INFO *pBuf, WCHAR _wCode, WORD _wAttr);
@@ -39,7 +41,9 @@ namespace TGE {
 	namespace util {
 		UINT64 GetTimeMs64();
 	}
+	extern char g_szTokens[8][MAX_TOKEN_SIZE];
 	int doTokenize(char *szBuf, char szBufToken[8][MAX_TOKEN_SIZE]);
+	int Tokenize(char* szBuf);
 
 	//파일처리 
 	int loadBufferBinary(CHAR_INFO *pBuf, const char *szFileName);
@@ -56,6 +60,8 @@ namespace TGE {
 		extern COORD g_cdMousePos;
 		void setNormalMode();
 		void setEditMode();
+		void pauseInputThread();
+		void resumeInputThread();
 	}
 	
 	void startTGE(HANDLE *phStdout);
