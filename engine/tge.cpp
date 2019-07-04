@@ -40,7 +40,8 @@ namespace TGE {
 	void setCharacterW(CHAR_INFO* pBuf, int x, int y, WCHAR code, WORD attr)
 	{
 		//chiBuffer[(80 * 5) + 5].Char.UnicodeChar = TEXT('A');
-		int _nIndex = ((40 * y) + (x)) * 2;
+		//int _nIndex = ((40 * y) + (x)) * 2;
+		int _nIndex = ((80 * y) + (x));
 		pBuf[_nIndex].Char.UnicodeChar = code;
 		pBuf[_nIndex].Attributes = COMMON_LVB_LEADING_BYTE | attr;
 
