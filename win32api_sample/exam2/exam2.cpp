@@ -1,8 +1,8 @@
-﻿// exam1.cpp : 애플리케이션에 대한 진입점을 정의합니다.
+﻿// exam2.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
 #include "framework.h"
-#include "exam1.h"
+#include "exam2.h"
 
 #define MAX_LOADSTRING 100
 
@@ -29,7 +29,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_EXAM1, szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_EXAM2, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // 애플리케이션 초기화를 수행합니다:
@@ -38,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_EXAM1));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_EXAM2));
 
     MSG msg;
 
@@ -73,10 +73,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_EXAM1));
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_EXAM2));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_EXAM1);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_EXAM2);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -105,29 +105,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
-   CreateWindow(L"static", L"이름을 입력하세요.", WS_CHILD | WS_VISIBLE,
-	   0, 0, 150, 25,  //위치 
-	   hWnd, (HMENU)-1, hInst, NULL);
-
-   CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | CBS_AUTOHSCROLL | WS_BORDER,
-	   0, 25, 100, 25, hWnd, (HMENU)3001, hInst, NULL
-   );
-
-   CreateWindow(L"static", L"나이를 입력하세요.", WS_CHILD | WS_VISIBLE,
-	   0, 100, 150, 25, hWnd, (HMENU)-1, hInst, NULL);
-
-   CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_AUTOHSCROLL,
-	   0, 125, 100, 25, hWnd, (HMENU)3002, hInst, NULL);
-
-   CreateWindow(L"static", L"너의 인생의무게를 입력하세요.", WS_CHILD | WS_VISIBLE,
-	   0, 200, 280, 25, hWnd, (HMENU)-1, hInst, NULL);
-
-   CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_AUTOHSCROLL,
-	   0, 225, 100, 25, hWnd, (HMENU)3003, hInst, NULL);
-
-   CreateWindow(L"button", L"Ok", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-	   225, 25, 100, 25, hWnd, (HMENU)4001, hInst, NULL);
-
+   CreateWindow(L"button", L"다이얼로그", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+	   0, 25, 100, 25, hWnd, (HMENU)4001, hInst, NULL);
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -135,6 +114,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+
+INT_PTR CALLBACK testProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 //
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -156,33 +137,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wmId)
             {
 			case 4001:
-			{
-				static TCHAR szTemp[256];
-				GetWindowText(GetDlgItem(hWnd, 3001), szTemp, 
-					sizeof(szTemp) / sizeof(TCHAR));
-
-				static TCHAR szName[256];
-				lstrcpyW(szName, szTemp);
-				
-				int nAge;
-				GetWindowText(GetDlgItem(hWnd, 3002), szTemp, sizeof(szTemp) / sizeof(TCHAR));
-				nAge = _wtoi(szTemp);
-
-				double fWeight;
-				GetWindowText(GetDlgItem(hWnd, 3003), szTemp, sizeof(szTemp) / sizeof(TCHAR));
-				fWeight = _wtof(szTemp);
-
-				HDC hdc = GetDC(hWnd);
-				TCHAR szBuf[256];
-				swprintf_s(szBuf, sizeof(szBuf)/sizeof(TCHAR), L"당신의 이름은 %s 입니다. 나이는 %d살입니다. %lfkg", szName, nAge,fWeight);
-				TextOut(hdc, 225, 150, szBuf, wcslen(szBuf));
-
-				OutputDebugString(szBuf);
-
-				ReleaseDC(hWnd, hdc);
-
-			}
-
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, testProc);
 				break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
@@ -231,3 +186,32 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return (INT_PTR)FALSE;
 }
+
+INT_PTR CALLBACK testProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		else if ((LOWORD(wParam) == IDC_BUTTON1) ) {
+			static TCHAR szTemp[256];
+			GetWindowText(GetDlgItem(hDlg, IDC_EDIT_TEST), szTemp,
+				sizeof(szTemp) / sizeof(TCHAR));
+
+			SetWindowText(GetDlgItem(hDlg, IDC_STATIC_TEST), szTemp);
+
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
+
+
