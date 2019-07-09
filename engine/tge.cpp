@@ -308,7 +308,7 @@ namespace TGE {
 
 			UINT64 ret_value = li.QuadPart;
 			ret_value -= 116444736000000000LL;
-			ret_value /= 10000;
+			ret_value /= 1000;
 
 			return ret_value;
 
