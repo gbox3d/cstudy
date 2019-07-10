@@ -139,8 +139,7 @@ namespace TGE {
 			fread_s(pBuf, SCREEN_BUF_SIZE * sizeof(CHAR_INFO), sizeof(CHAR_INFO), SCREEN_BUF_SIZE, fp);
 			fclose(fp);
 			return 0;
-		}
-		
+		}		
 
 		return -1;
 	}
@@ -149,10 +148,13 @@ namespace TGE {
 	{
 		FILE *fp;
 		fopen_s(&fp, szFileName, "w");
-		fwrite(pBuf, SCREEN_BUF_SIZE * sizeof(CHAR_INFO), 1, fp);
-		fclose(fp);
+		if (fp) {
+			fwrite(pBuf, SCREEN_BUF_SIZE * sizeof(CHAR_INFO), 1, fp);
+			fclose(fp);
+			return 0;
+		}
 
-		return 0;
+		return -1;
 	}
 
 	CHAR_INFO *CreateScreenBuffer()
