@@ -134,7 +134,7 @@ namespace TGE {
 	{
 		FILE *fp;
 		fopen_s(&fp, szFileName, "r");
-		if (!fp)
+		if (fp)
 		{
 			fread_s(pBuf, SCREEN_BUF_SIZE * sizeof(CHAR_INFO), sizeof(CHAR_INFO), SCREEN_BUF_SIZE, fp);
 			fclose(fp);
