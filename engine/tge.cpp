@@ -207,6 +207,7 @@ namespace TGE {
 		DWORD _oldInputMode;
 		HANDLE hStdin;
 		COORD g_cdMousePos;
+		DWORD g_dwButtonState;
 
 		int _InputThreadFSM = 0;
 
@@ -237,6 +238,8 @@ namespace TGE {
 						}
 						else if (irInBuf[i].EventType == MOUSE_EVENT) {
 
+							g_dwButtonState = irInBuf[i].Event.MouseEvent.dwButtonState;
+							
 							g_cdMousePos = {
 								irInBuf[i].Event.MouseEvent.dwMousePosition.X,
 								irInBuf[i].Event.MouseEvent.dwMousePosition.Y
