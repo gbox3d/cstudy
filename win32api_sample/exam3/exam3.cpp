@@ -1,8 +1,8 @@
-﻿// exam2.cpp : 애플리케이션에 대한 진입점을 정의합니다.
+﻿// exam3.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
 #include "framework.h"
-#include "exam2.h"
+#include "exam3.h"
 
 #define MAX_LOADSTRING 100
 
@@ -29,7 +29,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_EXAM2, szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_EXAM3, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // 애플리케이션 초기화를 수행합니다:
@@ -38,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_EXAM2));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_EXAM3));
 
     MSG msg;
 
@@ -73,10 +73,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_EXAM2));
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_EXAM3));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_EXAM2);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_EXAM3);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -105,17 +105,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
-   CreateWindow(L"button", L"다이얼로그", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
-	   0, 25, 100, 25, hWnd, (HMENU)4001, hInst, NULL);
-
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
    return TRUE;
 }
 
-
-INT_PTR CALLBACK testProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 //
 //  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -136,24 +131,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // 메뉴 선택을 구문 분석합니다:
             switch (wmId)
             {
-			case 4001:
-			{
-				int nResult = DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, testProc);
-				switch (nResult)
-				{
-				case IDOK:
-					OutputDebugString(L"IDOK");
-					break;
-				case IDCANCEL:
-					OutputDebugString(L"IDCANCEL");
-					break;
-				default:
-					break;
-				}
+			case ID_TEST_ITEM1:
+				MessageBox(hWnd, L"hello", L"info", MB_OK);
+				InvalidateRect(hWnd, NULL, true);
 
-			}	
 				break;
-			
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
@@ -170,6 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+			
             EndPaint(hWnd, &ps);
         }
         break;
@@ -201,32 +184,3 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return (INT_PTR)FALSE;
 }
-
-INT_PTR CALLBACK testProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
-
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		else if ((LOWORD(wParam) == IDC_BUTTON1) ) {
-			static TCHAR szTemp[256];
-			GetWindowText(GetDlgItem(hDlg, IDC_EDIT_TEST), szTemp,
-				sizeof(szTemp) / sizeof(TCHAR));
-
-			SetWindowText(GetDlgItem(hDlg, IDC_STATIC_TEST), szTemp);
-
-		}
-		break;
-	}
-	return (INT_PTR)FALSE;
-}
-
-

@@ -20,11 +20,11 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{D31DAEE1-8509-4F79-98C6-E637141996B6}</ProjectGuid>
+    <ProjectGuid>{50AF561B-D878-422C-9527-26074099BE0E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>exam2</RootNamespace>
+    <RootNamespace>exam3</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>exam2_modal</ProjectName>
+    <ProjectName>exam3_menu</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -152,23 +152,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="exam2.h" />
+    <ClInclude Include="exam3.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="exam2.cpp" />
+    <ClCompile Include="exam3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="exam2.rc" />
+    <ResourceCompile Include="exam3.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="exam2.ico" />
+    <Image Include="exam3.ico" />
     <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
