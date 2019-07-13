@@ -13,3 +13,6 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+#include "../../engine/irrlicht/include/irrlicht.h"
+#include "../../engine/plusEngine.h"

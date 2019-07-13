@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "exam2.h"
+#include "gameMain.h"
 
 #define MAX_LOADSTRING 100
 
@@ -41,16 +42,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_EXAM2));
 
     MSG msg;
-
-    // 기본 메시지 루프입니다:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+	plusEngine::GDIPLUS_Loop(msg, Rect(0, 0, 320, 240), OnGdiplusSetup, OnGdiplusApply, OnGdiplusRender, OnGdiplusFinish);
+   
 
     return (int) msg.wParam;
 }
@@ -105,8 +98,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+  // plusEngine::updateDC(hWnd);
 
    return TRUE;
 }

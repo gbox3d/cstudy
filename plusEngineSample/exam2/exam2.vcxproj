@@ -153,11 +153,14 @@
   <ItemGroup>
     <ClInclude Include="exam2.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="gameMain.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\engine\plusEngine.cpp" />
     <ClCompile Include="exam2.cpp" />
+    <ClCompile Include="gameMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="exam2.rc" />
