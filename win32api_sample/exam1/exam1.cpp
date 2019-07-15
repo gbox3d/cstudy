@@ -128,6 +128,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    CreateWindow(L"button", L"Ok", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
 	   225, 25, 100, 25, hWnd, (HMENU)4001, hInst, NULL);
 
+   CreateWindow(L"static", L"result......", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+	   0, 255, 256, 256, hWnd, (HMENU)4002, hInst, NULL);
+
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -176,6 +179,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				TCHAR szBuf[256];
 				swprintf_s(szBuf, sizeof(szBuf)/sizeof(TCHAR), L"당신의 이름은 %s 입니다. 나이는 %d살입니다. %lfkg", szName, nAge,fWeight);
 				TextOut(hdc, 225, 150, szBuf, wcslen(szBuf));
+				
+				SetWindowText(GetDlgItem(hWnd, 4002),szBuf);
 
 				OutputDebugString(szBuf);
 

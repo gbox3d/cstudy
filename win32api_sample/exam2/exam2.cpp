@@ -137,8 +137,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wmId)
             {
 			case 4001:
-				DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, testProc);
+			{
+				int nResult = DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, testProc);
+				switch (nResult)
+				{
+				case IDOK:
+					OutputDebugString(L"IDOK");
+					break;
+				case IDCANCEL:
+					OutputDebugString(L"IDCANCEL");
+					break;
+				default:
+					break;
+				}
+
+			}	
 				break;
+			
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
