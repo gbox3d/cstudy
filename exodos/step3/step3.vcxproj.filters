@@ -15,15 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="step1.cpp">
+    <ClCompile Include="step3.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="..\..\engine\tge.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="playerObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="worldmap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\engine\tge.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="playerObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="worldmap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

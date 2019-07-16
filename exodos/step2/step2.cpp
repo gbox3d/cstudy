@@ -41,6 +41,7 @@ int main()
 
 		TGE::updateBuffer(hStdout, TGE::g_chiBuffer); //화면에 보이게..
 
+		//종료 
 		if (TGE::input::g_KeyTable[VK_ESCAPE]) bLoop = false;
 
 	}
