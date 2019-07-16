@@ -128,7 +128,7 @@ int main()
 				}
 				else {
 					TGE::setCursor(hStdout, 0, 27);
-					puts("                        ");
+					puts("                              ");
 
 				}
 			}
