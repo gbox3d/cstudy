@@ -34,7 +34,7 @@ namespace plusEngine {
 		}
 		inline PointF irr2Point(irr::core::vector3df &a)
 		{
-			return irr2Point((irr::core::vector3df &)irr::core::vector2df(a.X, a.Y));
+			return irr2Point((irr::core::vector2df &)irr::core::vector2df(a.X, a.Y));
 		}
 
 		inline RectF irr2Rect(irr::core::vector2df &pos, irr::core::vector2df &size)
