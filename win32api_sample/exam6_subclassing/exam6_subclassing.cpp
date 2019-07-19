@@ -126,8 +126,32 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 
 HWND testWnd;
-LRESULT CALLBACK Proc1(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-WNDPROC oldProc;
+WNDPROC oldEditProc;
+
+LRESULT CALLBACK testWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_CHAR:
+	{
+#ifdef _DEBUG
+		TCHAR szBuf[256];
+		swprintf_s(szBuf, sizeof(szBuf) / sizeof(TCHAR), L"key : %8d \n", wParam);
+		OutputDebugString(szBuf);
+#endif
+		if (wParam < '0' || wParam > '9') return 0;
+	}
+	break;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		break;
+	}
+
+	return CallWindowProc(oldEditProc, hWnd, message, wParam, lParam);
+}
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -135,10 +159,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 	{
-		testWnd = CreateWindow(L"static", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER,
-			10, 10, 320, 240, hWnd, (HMENU)0, hInst, NULL);
+		testWnd = CreateWindow(L"edit", NULL,
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			10, 10, 128, 20, hWnd, (HMENU)1001, hInst, NULL);
 		SetFocus(testWnd);
-		oldProc = (WNDPROC)SetWindowLong(testWnd, GWL_WNDPROC, (LONG)Proc1);
+		oldEditProc = (WNDPROC)SetWindowLong(testWnd, GWL_WNDPROC, (LONG)testWndProc);
 
 	}
 	break;
@@ -198,44 +223,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return (INT_PTR)FALSE;
 }
-
-LRESULT CALLBACK Proc1(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-	case WM_COMMAND:
-	{
-		int wmId = LOWORD(wParam);
-		// 메뉴 선택을 구문 분석합니다:
-		switch (wmId)
-		{
-		default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-	}
-	break;
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hWnd, &ps);
-		// TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-		TextOut(hdc,0,0,L"hello",wcslen(L"hello"));
-
-		MoveToEx(hdc, 0, 0,NULL);
-		LineTo(hdc, 200, 200);
-
-		Rectangle(hdc, 50, 50, 300, 200);
-
-		EndPaint(hWnd, &ps);
-	}
-	break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
-	}
-	return 0;
-}
-
 
